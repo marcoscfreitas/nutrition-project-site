@@ -1,0 +1,11 @@
+Alimento,Carboidratos (mg),Proteínas (mg),Gorduras (mg),Fibras (mg),Açúcares (mg),Sódio (mg),Potássio (mg),Cálcio (mg),Vitaminas Principais
+Arroz branco,28.200,2.700,300,400,100,1,35,10,-
+Feijão,20.000,9.000,500,1.300,1.000,2,1.500,50,B9
+Pão francês,50.000,9.000,2.500,2.500,2.500,470,120,20,-
+Laranja,11.750,940,120,1.800,9.350,1,180,40,"C, A"
+Carne bovina,0,26.000,20.000,0,0,65,350,15,-
+Carne de frango,0,31.000,3.600,0,0,70,300,12,-
+Ovo,720,13.000,10.000,0,0,120,126,56,"B12, D"
+Café (sem açúcar),0,0,0,0,0,5,90,0,-
+Banana,22.840,1.090,330,2.600,12.230,1,360,5,"B6, C"
+Batata branca,17.580,2.020,100,2.200,1.250,6,425,10,C
