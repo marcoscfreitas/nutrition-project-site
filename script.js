@@ -1,3 +1,9 @@
+$(document).ready(function() {
+    $('#visualizacao').click(function() {
+        somaCaloria();
+    });
+});
+
 function somaCaloria() {
     // Valores nutricionais por grama de cada alimento
     var carboidratos_por_grama = {
@@ -41,16 +47,16 @@ function somaCaloria() {
 
     // Quantidade consumida em gramas
     var gramas = {
-        Arroz: +document.getElementById('gramaArroz').value,
-        Feijão: +document.getElementById('gramaFeijao').value,
-        Pão: +document.getElementById('gramaPao').value,
-        Laranja: +document.getElementById('gramaLaranja').value,
-        Carne: +document.getElementById('gramaCarne').value,
-        Frango: +document.getElementById('gramaFrango').value,
-        Ovo: +document.getElementById('gramaOvo').value,
-        Café: +document.getElementById('gramaCafe').value,
-        Banana: +document.getElementById('gramaBanana').value,
-        Batata: +document.getElementById('gramaBatata').value
+        Arroz: +$('#gramaArroz').val(),
+        Feijão: +$('#gramaFeijao').val(),
+        Pão: +$('#gramaPao').val(),
+        Laranja: +$('#gramaLaranja').val(),
+        Carne: +$('#gramaCarne').val(),
+        Frango: +$('#gramaFrango').val(),
+        Ovo: +$('#gramaOvo').val(),
+        Café: +$('#gramaCafe').val(),
+        Banana: +$('#gramaBanana').val(),
+        Batata: +$('#gramaBatata').val()
     };
 
     var calorias_por_alimento = {};
@@ -89,19 +95,20 @@ function somaCaloria() {
     });
 
     // Gerar gráficos de pizza para cada alimento
-    var containerPies = document.getElementById('container-pies');
-    containerPies.innerHTML = '';
+    var containerPies = $('#container-pies');
+    containerPies.empty();
 
     for (var alimento in gramas) {
         if (gramas[alimento] > 0) {
-            var div = document.createElement('div');
-            div.style.width = '23%';
-            div.style.height = '300px';
-            div.style.margin = '10px';
+            var div = $('<div></div>').css({
+                width: '23%',
+                height: '300px',
+                margin: '10px'
+            });
 
-            containerPies.appendChild(div);
+            containerPies.append(div);
 
-            Highcharts.chart(div, {
+            Highcharts.chart(div[0], {
                 chart: {
                     type: 'pie'
                 },
