@@ -5,6 +5,10 @@
     box-sizing: border-box;
 }
 
+#adicionar-refeicao, #tabelaRefeicoes {
+    display: none;
+}
+
 .header {
     display: flex;
     align-items: center;
@@ -15,21 +19,44 @@
     height: 10vh;
 }
 
+.meta-diaria {
+    border-left: 70px solid black;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    background-color: rgb(214, 214, 214);
+    height: 10vh;
+    width:100vw;
+    box-shadow: 0px 10px 15px -15px black;;
+}
+
+#confirmar-meta {
+    padding:0.5%;
+    margin-right:1%;
+}
+
 .header h1 {
     font-size: 38px;
     padding-left: 1%;
 }
 
 body {
-    background-color: #ACE1AF;
+    background-image: repeating-linear-gradient(
+        45deg,
+        #ACE1AF,
+        #ACE1AF 90px,
+        #87d38b 90px,
+        #87d38b 180px
+    );
     overflow-x: hidden;
 }
 
+/* #ACE1AF; */
 .food-card {
     transition: transform 1s;
     box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
     border-radius: 10%;
-    background-color: #dee1ac;
+    background-color: #ddd;
     margin-left: 6%;
     margin-right: 6%;
     margin-top: 3%;
@@ -37,6 +64,7 @@ body {
     display: flex;
     width: 36vw;
     height: 40vh;
+    align-items: center;
 }
 
 .food-card:hover {
@@ -79,6 +107,69 @@ body {
 .button-visu button {
     padding: 10px 40px;
     font-size: 20px;
-    border-radius: 10px;
-    border: 2px solid black;
+
+}
+
+/* #adicionar-refeicao {
+    display:none;
+} */
+
+.container-tabela {
+    display: flex;
+    justify-content: flex-end;
+}
+
+#tabelaRefeicoes {
+    /* display: none; */
+    width: 50%;
+    border-collapse: collapse;
+    background-color: #fff;
+    border-radius: 8px;
+}
+
+th, td {
+    padding: 12px;
+    text-align: center;
+    border: 1px solid black;
+}
+
+th {
+    background-color: #5bc0de;
+    font-size: 16px;
+}
+
+td {
+    font-size: 14px;
+}
+
+#button-return {
+    position: fixed; /* Fixed/sticky position */
+    bottom: 20px; /* Place the button at the bottom of the page */
+    right: 30px; /* Place the button 30px from the right */
+    z-index: 99; /* Make sure it does not overlap */
+    border: none; /* Remove borders */
+    outline: none; /* Remove outline */
+    background-color: #3b853f; /* Set a background color */
+    color: white; /* Text color */
+    cursor: pointer; /* Add a mouse pointer on hover */
+    padding-left: 15px; /* Some padding */
+    padding-right: 15px; /* Some padding */
+    padding-top: 1px;
+    padding-bottom: 1px;
+    border-radius: 30px; /* Rounded corners */
+    font-size: 30px; /* Increase font size */
+}
+
+#button-return:hover {
+    background-color: #555; /* Add a dark-grey background on hover */
+}
+
+footer {
+    background-color: #2d7030;
+    color: white;
+    text-align: center;
+    padding: 20px 0;
+    bottom: 0;
+    width: 100%;
+    font-size: 16px;
 }
