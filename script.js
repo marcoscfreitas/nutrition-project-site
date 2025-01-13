@@ -2,25 +2,22 @@ $(document).ready(function () {
     var graficoCriado = false; // variavel criada para verificar se grafico já foi criado
 
     $('#visualizacao').click(function () {
-        somaCaloria();
+        somaCaloria(); // função para calcular as calorias de acordo com macronutrientes
         
         // exibe os elementos da parte 2 após botao de visualização ser criado
         $('#adicionar-refeicao').show();
         $('#tabelaRefeicoes').show();
 
-        // verifica se foi criado, e caso contrario inicia o gráfico para ser atualizado com as metas
+        // verifica se foi criado para, e caso contrario inicia o gráfico para ser atualizado com as metas
         if (graficoCriado === false) {
             graficoMetasDiarias(); // chama o gráfico das metas diárias
             graficoCriado = true;
-        } else {
-            // se o gráfico já foi criado, é apenas atualizado, sem criar um novo para cada atualização
-            atualizarGraficoMetasDiarias(); // função para atualizar o gráfico
         }
     });
 
     $('#adicionar-refeicao').click(function () {
         adicionarRefeicao(); // função para adicionar refeição na tabela
-        $('.input-food').val(''); 
+        $('.input-food').val(''); // zera valores dos inputs
     });
 
     $('#confirmar-meta').click(function () {
@@ -68,14 +65,14 @@ var gorduras_por_grama = {
     Batata: 0.001
 };
 
-// variavel globais com objetos para armazenar metas e também consumo semanal
+// variavel globais com objetos para armazenar metas e também consumo diario
 var metaDiaria = {
     carboidratos: 0,
     proteinas: 0,
     gorduras: 0
 };
-var consumoSemanal = [];
-var graficoLinhas;
+var consumoDiario = []; // % da meta cumprida
+var graficoLinhas; // grafico highcharts
 
 // grafico da meta diaria
 function graficoMetasDiarias() {
@@ -128,15 +125,15 @@ function somaCaloria() {
         Batata: +$('#gramaBatata').val()
     };
 
-    var calorias_por_alimento = {};
+    var calorias_por_alimento = {};  // dicionario para armazenar calorias de todos alimentos
 
-    for (var alimento in gramas) {
+    for (var alimento in gramas) { // for para chamar variavel global e multiplicar pelas gramas inseridas
         var carb = carboidratos_por_grama[alimento] * gramas[alimento];
         var prot = proteinas_por_grama[alimento] * gramas[alimento];
         var gord = gorduras_por_grama[alimento] * gramas[alimento];
 
         var calorias = (carb * 4) + (prot * 4) + (gord * 9);
-        calorias_por_alimento[alimento] = calorias;
+        calorias_por_alimento[alimento] = calorias; // adiciona caloria respectiva a cada alimento
     }
 
     Highcharts.chart('container-column', {
@@ -157,11 +154,11 @@ function somaCaloria() {
     containerPies.empty(); // atualizar graficos a cada refeição nova visualizada
 
     for (var alimento in gramas) {
-        if (gramas[alimento] > 0) {
-            var div = $('<div></div>').css({
+        if (gramas[alimento] > 0) { // apenas cria grafico pie para alimentos inseridos
+            var div = $('<div></div>').css({ // cria uma div para cada alimento
                 width: '23%', height: '300px', margin: '10px'
             });
-            containerPies.append(div);
+            containerPies.append(div); // insere na div o gráfico pie
 
             Highcharts.chart(div[0], {
                 chart: { type: 'pie' },
@@ -179,30 +176,29 @@ function somaCaloria() {
     }
 }
 
-// atualiza o grafico das metas diaria
-function atualizarGraficoLinhas() {
-    var totalCarboidratos = 0, totalProteinas = 0, totalGorduras = 0;
+// atualiza o grafico das metas diaria com cada refeição adicionada
+function atualizarGraficoMetasDiarias() {
+    var totalCarboidratos = 0, totalProteinas = 0, totalGorduras = 0; // reseta para cada uso
 
     for (var alimento in gramas) {
         totalCarboidratos += carboidratos_por_grama[alimento] * gramas[alimento];
         totalProteinas += proteinas_por_grama[alimento] * gramas[alimento];
         totalGorduras += gorduras_por_grama[alimento] * gramas[alimento];
     }
-
+    //math.min para as % nao ultrapassarem de 100% e "estragar" o gráfico
     var porcentagemCarboidratos = Math.min((totalCarboidratos / metaDiaria.carboidratos) * 100, 100);
     var porcentagemProteinas = Math.min((totalProteinas / metaDiaria.proteinas) * 100, 100);
     var porcentagemGorduras = Math.min((totalGorduras / metaDiaria.gorduras) * 100, 100);
 
-    consumoSemanal.push({
+    consumoDiario.push({ // adiciona as % consumidas da meta ao vetor de consumo diario
         carboidratos: porcentagemCarboidratos,
         proteinas: porcentagemProteinas,
         gorduras: porcentagemGorduras
     });
 
-    var diaIndex = consumoSemanal.length - 1;
+    var contDias = consumoDiario.length - 1; // inicia contDias como limitador para atualizar o gráfico de meta
 
-    // Atualizar gráfico no dia correspondente
-    if (diaIndex < 5) {
+    if (contDias < 5) { // quando ultrapassa 5 dias, para de atualizar o gráfico
         graficoLinhas.series[0].addPoint(porcentagemCarboidratos);
         graficoLinhas.series[1].addPoint(porcentagemProteinas);
         graficoLinhas.series[2].addPoint(porcentagemGorduras);
@@ -211,24 +207,24 @@ function atualizarGraficoLinhas() {
 
 // função para adicionar a refeição na tabela e atualizar o gráfico de meta
 function adicionarRefeicao() {
-    var totalCarboidratos = 0, totalProteinas = 0, totalGorduras = 0;
+    var totalCarboidratos = 0, totalProteinas = 0, totalGorduras = 0; // reseta para cada uso
 
     for (var alimento in gramas) {
-        if (gramas[alimento] > 0) {
+        if (gramas[alimento] > 0) { // se o alimento for inserido, soma nas variaveis de contagem para add na tabela
             totalCarboidratos += carboidratos_por_grama[alimento] * gramas[alimento];
             totalProteinas += proteinas_por_grama[alimento] * gramas[alimento];
             totalGorduras += gorduras_por_grama[alimento] * gramas[alimento];
         }
     }
 
-    var linhaVazia = $('#tabelaRefeicoes tbody tr:has(td:empty)').first(); // seleciona a primeira linha vazia de uma table, first serve para que somente a primeira linha seja selecionada
-    if (linhaVazia.length > 0) {
+    var linhaVazia = $('#tabelaRefeicoes tbody tr:has(td:empty)').first(); // seleciona os tr da tabela e filtra linhas que tem pelo menos um td vazio, first serve para que somente a primeira linha seja selecionada
+    if (linhaVazia.length > 0) { // se for encontrada uma linha vazia, adiciona os valores, caso contrario já estão preenchidas
         linhaVazia.find('td:eq(1)').text(totalCarboidratos.toFixed(2)); // usa o find para encontrar celulas td e os eq para dizer qual celula dentro do td
         linhaVazia.find('td:eq(2)').text(totalProteinas.toFixed(2));
         linhaVazia.find('td:eq(3)').text(totalGorduras.toFixed(2));
 
         // atualiza o gráfico de linhas
-        atualizarGraficoLinhas();
+        atualizarGraficoMetasDiarias();
     } else {
         alert('Todas as refeições para a semana já foram adicionadas.'); 
     }

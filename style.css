@@ -51,12 +51,11 @@ body {
     overflow-x: hidden;
 }
 
-/* #ACE1AF; */
 .food-card {
     transition: transform 1s;
     box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
     border-radius: 10%;
-    background-color: #ddd;
+    background-color: #f1f1f1;
     margin-left: 6%;
     margin-right: 6%;
     margin-top: 3%;
