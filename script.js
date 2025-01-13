@@ -1,30 +1,30 @@
 $(document).ready(function () {
-    var graficoCriado = false; // Flag para controlar se o gráfico já foi criado
+    var graficoCriado = false; // variavel criada para verificar se grafico já foi criado
 
     $('#visualizacao').click(function () {
         somaCaloria();
         
-        // Exibe os elementos
+        // exibe os elementos da parte 2 após botao de visualização ser criado
         $('#adicionar-refeicao').show();
         $('#tabelaRefeicoes').show();
 
-        // Verifica se o gráfico já foi criado
-        if (!graficoCriado) {
-            graficoMetasDiarias(); // Inicializa o gráfico se ainda não foi criado
-            graficoCriado = true;   // Marca que o gráfico foi criado
+        // verifica se foi criado, e caso contrario inicia o gráfico para ser atualizado com as metas
+        if (graficoCriado === false) {
+            graficoMetasDiarias(); // chama o gráfico das metas diárias
+            graficoCriado = true;
         } else {
-            // Se o gráfico já foi criado, apenas atualize os dados, se necessário
-            atualizarGraficoMetasDiarias(); // Função para atualizar o gráfico sem resetá-lo
+            // se o gráfico já foi criado, é apenas atualizado, sem criar um novo para cada atualização
+            atualizarGraficoMetasDiarias(); // função para atualizar o gráfico
         }
     });
 
     $('#adicionar-refeicao').click(function () {
-        adicionarRefeicao();
-        $('.input-food').val('');
+        adicionarRefeicao(); // função para adicionar refeição na tabela
+        $('.input-food').val(''); 
     });
 
     $('#confirmar-meta').click(function () {
-        confirmarMetaDiaria();
+        confirmarMetaDiaria(); // função para definir meta diária
     });
 });
 
@@ -113,7 +113,7 @@ function confirmarMetaDiaria() {
     }
 }
 
-// Função para calcular as calorias e gerar os gráficos
+// função para calcular as calorias e gerar os gráficos
 function somaCaloria() {
     gramas = {
         Arroz: +$('#gramaArroz').val(),
@@ -153,8 +153,8 @@ function somaCaloria() {
         }]
     });
 
-    var containerPies = $('#container-pies');
-    containerPies.empty();
+    var containerPies = $('#container-pies'); // cria também gráfico pie para cada alimento
+    containerPies.empty(); // atualizar graficos a cada refeição nova visualizada
 
     for (var alimento in gramas) {
         if (gramas[alimento] > 0) {
@@ -179,10 +179,8 @@ function somaCaloria() {
     }
 }
 
-// Adicionar consumo ao gráfico
+// atualiza o grafico das metas diaria
 function atualizarGraficoLinhas() {
-    if (!graficoLinhas) return;
-
     var totalCarboidratos = 0, totalProteinas = 0, totalGorduras = 0;
 
     for (var alimento in gramas) {
@@ -191,9 +189,9 @@ function atualizarGraficoLinhas() {
         totalGorduras += gorduras_por_grama[alimento] * gramas[alimento];
     }
 
-    var porcentagemCarboidratos = Math.min((totalCarboidratos / metaDiaria.carboidratos) * 100, 100) || 0;
-    var porcentagemProteinas = Math.min((totalProteinas / metaDiaria.proteinas) * 100, 100) || 0;
-    var porcentagemGorduras = Math.min((totalGorduras / metaDiaria.gorduras) * 100, 100) || 0;
+    var porcentagemCarboidratos = Math.min((totalCarboidratos / metaDiaria.carboidratos) * 100, 100);
+    var porcentagemProteinas = Math.min((totalProteinas / metaDiaria.proteinas) * 100, 100);
+    var porcentagemGorduras = Math.min((totalGorduras / metaDiaria.gorduras) * 100, 100);
 
     consumoSemanal.push({
         carboidratos: porcentagemCarboidratos,
@@ -208,12 +206,10 @@ function atualizarGraficoLinhas() {
         graficoLinhas.series[0].addPoint(porcentagemCarboidratos);
         graficoLinhas.series[1].addPoint(porcentagemProteinas);
         graficoLinhas.series[2].addPoint(porcentagemGorduras);
-    } else {
-        alert('Você já adicionou refeições para todos os dias da semana.');
     }
 }
 
-// Alterar função de adicionar refeição para incluir atualização do gráfico
+// função para adicionar a refeição na tabela e atualizar o gráfico de meta
 function adicionarRefeicao() {
     var totalCarboidratos = 0, totalProteinas = 0, totalGorduras = 0;
 
@@ -225,22 +221,22 @@ function adicionarRefeicao() {
         }
     }
 
-    var linhaVazia = $('#tabelaRefeicoes tbody tr:has(td:empty)').first();
-    if (linhaVazia.length) {
-        linhaVazia.find('td:eq(1)').text(totalCarboidratos.toFixed(2));
+    var linhaVazia = $('#tabelaRefeicoes tbody tr:has(td:empty)').first(); // seleciona a primeira linha vazia de uma table, first serve para que somente a primeira linha seja selecionada
+    if (linhaVazia.length > 0) {
+        linhaVazia.find('td:eq(1)').text(totalCarboidratos.toFixed(2)); // usa o find para encontrar celulas td e os eq para dizer qual celula dentro do td
         linhaVazia.find('td:eq(2)').text(totalProteinas.toFixed(2));
         linhaVazia.find('td:eq(3)').text(totalGorduras.toFixed(2));
 
-        // Atualizar gráfico de linhas
+        // atualiza o gráfico de linhas
         atualizarGraficoLinhas();
     } else {
-        alert('Todas as refeições para a semana já foram adicionadas.');
+        alert('Todas as refeições para a semana já foram adicionadas.'); 
     }
 }
 
-function returnTop() {
+function returnTop() { // função para back to top
     window.scrollTo({
         top: 0,
-        behavior: "smooth" // Rolagem suave
+        behavior: "smooth"
     });
     };
